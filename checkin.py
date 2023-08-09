@@ -10,7 +10,7 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 import undetected_chromedriver as uc
 from selenium.webdriver.support.ui import WebDriverWait
 
-
+# 获得浏览器的版本号
 def get_driver_version():
     system = platform.system()
 
@@ -32,7 +32,7 @@ def get_driver_version():
 
     return out
 
-
+# 签到程序，发送签到请求
 def glados_checkin(driver):
     checkin_url = "https://glados.rocks/api/user/checkin"
     checkin_query = """
@@ -71,8 +71,8 @@ def glados(cookie_string):
     options.add_argument("--disable-popup-blocking")
 
     version = get_driver_version()
-    driver = uc.Chrome(version_main=version, options=options)
-
+    driver = uc.Chrome(version_main=version)
+    print(uc.find_chrome_executable())
     # Load cookie
     driver.get("https://glados.rocks")
 
@@ -99,11 +99,14 @@ def glados(cookie_string):
     )
 
     message = str()
-
+    # 执行签到程序
     checkin_code, checkin_message = glados_checkin(driver)
-    if checkin_code == -2: checkin_message = "Login fails, please check your cookie."
+    # checkin_code如果为0代表签到成功，如果为1代表签到失败（可能是已签到，checkin_message一般是：oops,token error），2或其他代表登陆错误；
+    if checkin_code == -2:
+        checkin_message = "Login fails, please check your cookie."
+
     message = f"{message}【Checkin】{checkin_message}\n"
-    print(f"【Checkin】{message}")
+    print(f"【Checkin】{checkin_message}")
 
     if checkin_code != -2:
         status_code, status_data = glados_status(driver)

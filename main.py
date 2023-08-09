@@ -36,10 +36,23 @@ if __name__ == "__main__":
         checkin_codes.append(checkin_code)
         message_all = f"{message_all}{message}\n"
 
-    if -2 not in checkin_codes and checkin_codes.count(0) + checkin_codes.count(1) == len(checkin_codes):
-        title = "GLaDOS check in successful"
+    """
+        if -2 not in checkin_codes and checkin_codes.count(0) + checkin_codes.count(1) == len(checkin_codes):
+            title = "GLaDOS 签到成功！"
+        else:
+            title = "GLaDOS check in failed"
+        """
+    # 20230809更改提示标题
+    if len(checkin_codes) == 1:
+        if checkin_codes[0] == 0:
+            title = "GLaDOS 签到成功！"
+        elif checkin_codes[0] == 1:
+            title = "GLaDOS 重复签到！"
+        else:
+            title = "GLaDOS 签到失败！"
     else:
-        title = "GLaDOS check in failed"
+        title = "GLaDOS 未知错误！"
+
     message_all = f"{title}\n{message_all}"
     message_all = re.sub("\n+","\n", message_all)
     if message_all.endswith("\n"): message_all = message_all[:-1]
