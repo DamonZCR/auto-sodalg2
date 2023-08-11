@@ -36,14 +36,19 @@ def get_driver_version():
 def glados_checkin(driver):
     checkin_url = "https://glados.rocks/api/user/checkin"
     checkin_query = """
-        (function (){
-        var request = new XMLHttpRequest();
-        request.open("POST","%s",false);
-        request.setRequestHeader('content-type', 'application/json');
-        request.send('{"token": "glados.network"}');
-        return request;
-        })();
-        """ % (checkin_url)
+            (function (){
+            var request = new XMLHttpRequest();
+            request.open("POST","%s",false);
+            request.setRequestHeader('content-type', 'application/json;charset=UTF-8');
+            request.setRequestHeader('origin', 'https://glados.rocks');
+            request.setRequestHeader('authority', 'glados.rocks');
+            request.setRequestHeader('authorization', '69794648422198146854520851128606-1080-1920');
+            request.setRequestHeader('sec-ch-ua', '"Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"');
+            request.setRequestHeader('user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36');
+            request.send('{"token": "glados.one"}');
+            return request;
+            })();
+            """ % (checkin_url)
     checkin_query = checkin_query.replace("\n", "")
     resp = driver.execute_script("return " + checkin_query)
     resp = json.loads(resp["response"])
@@ -71,6 +76,7 @@ def glados(cookie_string):
     options.add_argument("--disable-popup-blocking")
 
     version = get_driver_version()
+    # 20230809报错，提示HttpError，将下面改为空参就可以了
     # driver = uc.Chrome(version_main=version, options=options)
     driver = uc.Chrome()
     print(uc.find_chrome_executable())
