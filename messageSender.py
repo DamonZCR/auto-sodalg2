@@ -1,7 +1,7 @@
 import requests
 import json
 
-
+#信息传送
 class MessageSender:
     def __init__(self):
         self.sender = {}
